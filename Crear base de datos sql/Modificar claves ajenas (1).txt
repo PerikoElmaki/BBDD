@@ -1,0 +1,8 @@
+Para cuando tengas que añadir foreign keys porque no están definidas todas las tablas,
+
+usar el ALTER TABLE
+
+ALTER TABLE ----
+ADD FOREIGN KEY(clave ajena) REFERENCES Tablareferenciada(clave referenc)
+	ON DELETE ----
+	ON UPDATE CASCADE;

@@ -1,0 +1,45 @@
+CREATE DATABASE BANCO;
+USE BANCO;
+
+CREATE TABLE CLIENTES(
+	nombre 		VARCHAR(10)  NOT NULL,
+	dni  		VARCHAR(10),
+	apellidos 	VARCHAR(20)  NOT NULL,
+	direccion 	VARCHAR(50)  NOT NULL,
+	email  		VARCHAR(20)  NOT NULL,
+	PRIMARY KEY(dni)
+);
+
+CREATE TABLE CUENTAS(
+	numerocuenta 	INTEGER(20),
+	saldo 			DECIMAL(50)  NOT NULL,
+	ultmov 			DATE  		 NOT NULL,
+	fechacreac  	DATE 		 NOT NULL,
+	PRIMARY KEY(numerocuenta)
+	
+);
+
+CREATE TABLE CLIENTECUENTA(
+	idcliente 	VARCHAR(10),
+	idcuenta  	INTEGER(20),
+	PRIMARY KEY(idcliente,idcuenta),
+	FOREIGN KEY(idcliente) REFERENCES CLIENTES(dni)
+		ON UPDATE CASCADE,
+	FOREIGN KEY(idcuenta) REFERENCES CUENTAS(numerocuenta)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
+		
+);
+
+CREATE TABLE CREDITOS(
+	idcredito  INTEGER(20),
+	fechacon   DATE  		NOT NULL,
+	cantidad   DECIMAL(20)  NOT NULL,
+	interes    INTEGER  	NOT NULL,
+	plazos     INTEGER 		NOT NULL,
+	amort 	   VARCHAR(10)  NOT NULL,
+	cliente    VARCHAR(10)  NOT NULL,
+	PRIMARY KEY(idcredito),
+	FOREIGN KEY(cliente) REFERENCES CLIENTES(dni)
+		ON UPDATE CASCADE
+);

@@ -1,0 +1,90 @@
+CREATE DATABASE VUELTAESPANA;
+USE VUELTAESPANA;
+
+CREATE TABLE CICLISTA(
+	dni 		VARCHAR(10),
+	alias 		VARCHAR(10)  NOT NULL,
+	direccion 	VARCHAR(30)  NOT NULL,
+	tlf 		INTEGER(15)  NOT NULL,
+	PRIMARY KEY(dni)
+);
+
+CREATE TABLE CARRERA(
+	idcarrera 	INTEGER,
+	nombre 		VARCHAR(10)  NOT NULL,
+	fechacreac 	DATE 		 NOT NULL,
+	pais 		VARCHAR(20)  NOT NULL,
+	numedic  	INTEGER 	 NOT NULL,
+	maxganador  VARCHAR(10),
+	amateur 	BOOLEAN 	NOT NULL,
+	PRIMARY KEY(idcarrera),
+	FOREIGN KEY(maxganador) REFERENCES CICLISTA(dni)
+		ON DELETE SET NULL
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE EDICION(
+	idcarrera 		INTEGER,
+	fechaedic 		DATE,
+	nombre 			VARCHAR(10) 	NOT NULL,
+	ganador 		VARCHAR(10),
+	primequipo 		VARCHAR(10),
+	pospriequip 	INTEGER 		NOT NULL,
+	PRIMARY KEY(idcarrera,fechaedic),
+	FOREIGN KEY(idcarrera) REFERENCES CARRERA(idcarrera)
+		ON UPDATE CASCADE,
+	FOREIGN KEY(ganador) REFERENCES CICLISTA(dni)
+		ON UPDATE CASCADE
+		ON DELETE SET NULL,
+	FOREIGN KEY(primequipo) REFERENCES CICLISTA(dni)
+		ON UPDATE CASCADE
+		ON DELETE SET NULL
+);
+
+CREATE TABLE CICLISTA_EDICION(
+	dni 		VARCHAR(10),
+	idcarrera 	INTEGER,
+	fechaedic 	DATE,
+	cuota 		DECIMAL(10),
+	dorsal 		INTEGER  NOT NULL,
+	PRIMARY KEY(dni,idcarrera,fechaedic),
+	FOREIGN KEY(dni) REFERENCES CICLISTA(dni)
+		ON UPDATE CASCADE,
+	FOREIGN KEY(idcarrera,fechaedic) REFERENCES EDICION(idcarrera,fechaedic)
+		ON UPDATE CASCADE
+);
+ALTER TABLE CICLISTA_EDICION
+ADD ROW dorsal INTEGER  NOT NULL;
+
+DROP CICLISTA_EDICION IF EXISTS;
+
+CREATE TABLE ETAPA(
+	idetapa 	INTEGER,
+	idcarrera 	INTEGER,
+	fechaedic 	DATE,
+	origen 		VARCHAR(10)  NOT NULL,
+	destino 	VARCHAR(10)  NOT NULL, 
+	fecha 		DATE 		 NOT NULL,
+	ganador 	VARCHAR(10),
+	PRIMARY KEY(idetapa,idcarrera,fechaedic),
+	FOREIGN KEY(idcarrera,fechaedic) REFERENCES EDICION(idcarrera,fechaedic)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	FOREIGN KEY(ganador) REFERENCES CICLISTA(dni)
+		ON UPDATE CASCADE
+);
+
+CREATE TABLE METAVOLANTE(
+	codmeta 	INTEGER,
+	idetapa 	INTEGER  NOT NULL,
+	idcarrera 	INTEGER  NOT NULL,
+	fechaedic 	DATE 	 NOT NULL,
+	ganador 	VARCHAR(10),
+	PRIMARY KEY(codmeta),
+	FOREIGN KEY(idetapa,idcarrera,fechaedic) REFERENCES ETAPA(idetapa,idcarrera,fechaedic)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE,
+	FOREIGN KEY(ganador) REFERENCES CICLISTA(dni)
+		ON DELETE SET NULL
+		ON UPDATE CASCADE
+);

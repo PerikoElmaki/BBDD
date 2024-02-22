@@ -1,0 +1,30 @@
+DELIMITER $$
+
+DROP FUNCTION IF EXISTS totaldias $$
+
+CREATE FUNCTION totaldias(f DATE) RETURNS INT
+BEGIN
+	DECLARE total INT;
+	SET total=DAY(f);
+	
+	CASE MONTH(f)
+		WHEN 1 THEN SET total=total+0;
+		WHEN 2 THEN SET total=total+31;
+		WHEN 3 THEN SET total=total+31+28;
+		WHEN 4 THEN SET total=total+31+28+31;
+		WHEN 5 THEN SET total=total+31+28+31+30;
+		WHEN 6 THEN SET total=total+31+28+31+30+31;
+		WHEN 7 THEN SET total=total+31+28+31+30+31+30;
+		WHEN 8 THEN SET total=total+31+28+31+30+31+30+31;
+		WHEN 9 THEN SET total=total+31+28+31+30+31+30+31+31;
+		WHEN 10 THEN SET total=total+31+28+31+30+31+30+31+31+30;
+		WHEN 11 THEN SET total=total+31+28+31+30+31+30+31+31+30+31;
+		WHEN 12 THEN SET total=total+31+28+31+30+31+30+31+31+30+31+30;
+		ELSE RETURN 0;
+		END CASE;
+		
+		RETURN total;
+END $$
+
+DELIMITER ;
+	

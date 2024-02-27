@@ -13,6 +13,6 @@ BEGIN
 		END IF;
 		SET conta=conta+1;
 	END WHILE;
-	SELECT CONCAT(suma,CONCAT(" es la suma de los primos hasta ",num)) AS sumaprimos;
+	SELECT CONCAT(suma," es la suma de los primos hasta ",num) AS sumaprimos;
 END $$
 DELIMITER ;

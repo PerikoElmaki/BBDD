@@ -1,4 +1,4 @@
-/*Mostrar dia siguiente de fecha parámetro*/
+ /*Mostrar dia siguiente de fecha parámetro*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS diasig $$
 CREATE PROCEDURE diasig(d INT,m INT,a INT)
@@ -32,6 +32,9 @@ BEGIN
 			SET a=a+1;
 		END IF; 
 		
+		IF a=0 THEN 
+			SET a=1;
+		END IF;
 		
 		SELECT CONCAT(d,"/",m,"/",a) AS dia_siguiente;
 	END IF;

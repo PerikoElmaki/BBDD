@@ -1,0 +1,41 @@
+DELIMITER $$
+DROP FUNCTION IF EXISTS mayoredad $$
+CREATE FUNCTION mayoredad(d INT,m INT,a INT) RETURNS BOOLEAN 
+BEGIN 
+	DECLARE hoy INT DEFAULT day(CURRENT_DATE());
+	DECLARE mes INT DEFAULT month(CURRENT_DATE());
+	DECLARE anio INT DEFAULT year(CURRENT_DATE());
+	DECLARE medad INT DEFAULT 18;
+	DECLARE edad INT DEFAULT anio-a;
+	
+	IF edad>medad THEN 
+		RETURN TRUE;
+	END IF;
+	
+	IF edad<medad THEN 
+		RETURN FALSE;
+	END IF;
+	
+	IF edad=medad THEN 
+		IF m<mes THEN 
+			RETURN TRUE;
+		ELSEIF m=mes THEN 
+			IF d<=hoy THEN 
+				RETURN TRUE;
+			ELSE
+				RETURN FALSE;
+			END IF;
+		ELSE 
+			RETURN FALSE;
+		END IF;
+	END IF;
+	
+END $$
+DELIMITER ;
+
+SELECT mayoredad(1,2,2000);
+SELECT mayoredad(1,1,2010);
+SELECT mayoredad(31,12,2001);
+SELECT mayoredad(2,2,2006);
+SELECT mayoredad(1,3,2006);
+SELECT mayoredad(29,2,2006);

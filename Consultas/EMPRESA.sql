@@ -6,7 +6,8 @@ WHERE oficio LIKE 'VENDEDOR';
 #--2. Apellido, salario, comisión y total a cobrar por cada
 #--empleado, suponiendo que se trata de sumar su salario
 #--a la correspondiente comisión, si la tuviera.
-
+SELECT apellido,salario,comision,salario+NVL(comision,0) AS total_cobrar
+FROM EMPLEADOS;
 
 #--Para convertir Nulo y operar con ello, función NVL(en odb) y NZ en sql(access)
 #--Le da a nulos(en el caso de que lo sean) el valor que queramos

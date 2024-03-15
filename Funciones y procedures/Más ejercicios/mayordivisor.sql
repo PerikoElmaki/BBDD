@@ -4,8 +4,8 @@ DROP FUNCTION IF EXISTS mayordiv $$
 CREATE FUNCTION mayordiv(n INT) RETURNS INT 
 BEGIN 
 	DECLARE mayor INT;
-	DECLARE i INT DEFAULT 0;
-	WHILE i<n DO 
+	DECLARE i INT DEFAULT 1;
+	WHILE i<=n/2 DO   -- Partido de dos para ahorrar iteraciones 
 		IF MOD(n,i)=0 THEN 
 			SET mayor=i;
 		END IF;

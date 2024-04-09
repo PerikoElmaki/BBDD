@@ -4,11 +4,11 @@ USE ligabasket;
 SOURCE C:\\BD\\ligabasket.sql;
 
 
-/*procedimiento que muestre el nombre del equipo ganador de un partido. El procedimiento
+/*3. procedimiento que muestre el nombre del equipo ganador de un partido. El procedimiento
 recibirá como parámetro el identificador del partido.*/
 DELIMITER $$
 DROP PROCEDURE IF EXISTS ganador $$
-CREATE PROCEDURE ganador(partido INT)
+CREATE PROCEDURE ganador(IN partido INT)
 BEGIN 
     SELECT nombre 
     FROM Equipos
@@ -24,25 +24,26 @@ DELIMITER ;
 
 CALL ganador(1);
 
-
-/*Crea una función que indique el número de partidos que ha ganado un equipo. La función recibirá
-como parámetro el identificador del equipo.*/
+/*Forma de victor*/
 DELIMITER $$
-DROP FUNCTION IF EXISTS numpartidos $$
-CREATE FUNCTION numpartidos(equipo INT) RETURNS INT 
+DROP PROCEDURE IF EXISTS ganador $$
+CREATE PROCEDURE ganador(IN partido INT)
 BEGIN 
-    DECLARE victoriaL INT;
-    DECLARE victoriaV INT; 
-    DECLARE totalwins INT;
-    SET victoriaL=SELECT elocal
-                        FROM Partidos 
-                        WHERE elocal=equipo AND puntosL>puntosV;
-    SET victoriaV=SELECT evisit 
-                        FROM Partidos 
-                        WHERE elocal=equipo AND puntosV>puntosL;
-    SET totalwins=SELECT COUNT(id_partido) FROM Partidos 
-                    WHERE elocal=victoriaL OR evisit=victoriaV
-                    GROUP BY elocal,evisit;
-    RETURN totalwins AS "Victorias del equipo";
+   DECLARE resLocal, resVisit, vencedor INT;
+   SET resLocal=(SELECT puntosL FROM Partidos WHERE id_partido=partido);
+   SET resVisit=(SELECT puntosV FROM Partidos WHERE id_partido=partido);
+   
+   IF(resLocal>resVisit) THEN 
+		SET vencedor=(SELECT elocal FROM Partidos WHERE id_partido=partido);
+	ELSE
+		SET vencedor=(SELECT evisit FROM Partidos WHERE id_partido=partido);
+   END IF;
+   
+   SELECT nombre 
+   FROM Equipos 
+   WHERE id_equipo=vencedor;
 END $$
 DELIMITER ;
+
+CALL ganador(1);
+

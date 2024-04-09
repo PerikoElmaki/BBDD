@@ -1,0 +1,40 @@
+DROP DATABASE IF EXISTS SPSP;
+CREATE DATABASE SPSP;
+USE SPSP;
+
+-- EMpezxamos con las tablas 
+CREATE TABLE S(
+	sn  	 VARCHAR(4),
+	snombre  VARCHAR(20) 	NOT NULL,
+	estado 	 INTEGER,
+	ciudad 	 VARCHAR(20) 	NOT NULL,
+	PRIMARY KEY(sn)
+);
+
+CREATE TABLE P(
+	pn 			VARCHAR(4),
+	pnombre 	VARCHAR(20) 	NOT NULL,
+	color 		VARCHAR(20) 	NOT NULL,
+	peso 		INTEGER 		NOT NULL,
+	ciudad 		VARCHAR(20) 	NOT NULL,
+	PRIMARY KEY(pn)
+);
+
+CREATE TABLE SP(
+	sn 		VARCHAR(4),
+	pn 		VARCHAR(4),
+	cant  	INTEGER 	NOT NULL,
+	PRIMARY KEY(sn,pn),
+	FOREIGN KEY(sn) REFERENCES S(sn) 
+		ON DELETE CASCADE 
+		ON UPDATE CASCADE,
+	FOREIGN KEY(pn) REFERENCES P(pn)
+		ON DELETE CASCADE 
+		ON UPDATE CASCADE
+);
+
+-- INSERTAMOS LOS DATOS 
+INSERT INTO S VALUES("S1","Salazar",20,"Londres");
+INSERT INTO S VALUES("S2","Jaimes",10,"Paris"),
+("S3","Bernal",30,"Paris"),("S4","Corona",20,"Londres"),
+

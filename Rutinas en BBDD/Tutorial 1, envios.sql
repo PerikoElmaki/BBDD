@@ -17,7 +17,7 @@ END $$
 DELIMITER ;
 CALL piezasEnvio("S1");
 
-#-- 4. Función que determine el peso total de un envío.
+--4. Función que determine el peso total de un envío.
 -- como parámetro el código del proveedor y el código de la pieza
 DELIMITER $$
 DROP FUNCTION IF EXISTS pesoTotal $$
@@ -32,3 +32,5 @@ DELIMITER ;
 
 SELECT pesoTotal("S1","P1");
 
+
+DELIMITER $$

@@ -97,6 +97,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+SALE NULL 
 UPDATE Nota
 SET nota=4
 WHERE codAlum=1;

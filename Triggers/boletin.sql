@@ -1,0 +1,108 @@
+DROP DATABASE IF EXISTS ARTICULOS; 
+CREATE DATABASE ARTICULOS; 
+USE ARTICULOS; 
+
+-- 1
+CREATE TABLE ARTICULO(
+	codArt 		VARCHAR(5),
+	nombre 		VARCHAR(50) 	NOT NULL,
+	lineArt 	VARCHAR(15),
+	precio  	INTEGER 		NOT NULL,
+	unidades 	INTEGER 		NOT NULL,
+	PRIMARY KEY(codArt)
+);
+
+-- 2
+SET @total=0;
+
+-- 3
+DELIMITER $$
+CREATE TRIGGER contar_articulos 
+AFTER INSERT ON ARTICULO 
+FOR EACH ROW 
+BEGIN 
+	SET @total=@total+NEW.unidades;
+END $$
+DELIMITER ;
+
+-- 4
+INSERT INTO ARTICULO VALUES('DD01','Disco Duro SSD 1TB','DDuro',225,10);
+INSERT INTO ARTICULO VALUES('DD02','Disco Duro SSD 500GB','DDuro',130,5);
+INSERT INTO ARTICULO VALUES('PB01','Placa Base AMD ASUS',NULL,95,8),
+('MR01','Memoria DDR4 8GB','MRAM',80,7),
+('MR02','Memoria DDR4 4GB','MRAM',45,10);
+
+
+-- 5
+DELIMITER $$
+CREATE TRIGGER actualizar_articulos
+AFTER UPDATE ON ARTICULO 
+FOR EACH ROW 
+BEGIN 
+	IF NEW.unidades<OLD.unidades THEN 
+		SET @total=@total-(OLD.unidades+NEW.unidades);
+	ELSE 
+		SET @total=@total+(NEW.unidades-OLD.unidades);
+	END IF;
+END $$
+DELIMITER ;
+
+-- 6
+UPDATE ARTICULO 
+SET unidades=unidades*2 WHERE codArt="DD02";
+
+-- 7
+UPDATE ARTICULO 
+SET unidades=unidades+1;
+
+
+-- 8
+SELECT @total;
+SELECT * from ARTICULO;
+
+-- 9 
+
+DELIMITER $$
+CREATE TRIGGER eliminar_articulo
+AFTER DELETE ON  ARTICULO
+FOR EACH ROW 
+BEGIN 
+	SET @total=@total-OLD.unidades;
+END $$
+DELIMITER ;
+
+-- 10 
+DELETE FROM ARTICULO
+WHERE precio<60;
+
+SELECT @total;
+
+-- 11
+CREATE TABLE VENTA (
+	codVenta 	VARCHAR(6),
+	codArt 		VARCHAR(5) 	NOT NULL,
+	fechaVenta 	DATE,
+	cantidad 	INTEGER 	NOT NULL,
+	PRIMARY KEY(codVenta), 
+	FOREIGN KEY(codArt) REFERENCES ARTICULO(codArt) 
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+-- 12
+DELIMITER $$
+CREATE TRIGGER vender_articulo 
+AFTER INSERT ON VENTA 
+FOR EACH ROW 
+BEGIN 
+	SET @total=@total-NEW.cantidad;
+END $$
+DELIMITER ;
+
+-- 13
+INSERT INTO VENTA VALUES('V01','DD01',NOW(),5),('V02','DD02',NOW(),3);
+
+-- 14
+SELECT @total;
+SELECT * FROM VENTA;
+

@@ -104,4 +104,5 @@ WHERE pasajero="47852358S" AND vuelo=4712;
 
 -- REaliza reserva (ocupacion) para el vuelo berlin dublin del pasajero 12547854F
 INSERT INTO OCUPACION_VUELOS
-SELECT VU.VUELO,'12547854F',NULL,
+SELECT VU.VUELO,'12547854F',ASIENTO,NULL 
+FROM 
